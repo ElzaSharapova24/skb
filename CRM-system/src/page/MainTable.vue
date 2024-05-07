@@ -102,14 +102,13 @@ export default {
             this.currentClient = client;
             this.$refs.deleteModal.show = true;
         },
-        async deleteClient(id, payload) {
-            try {
-                await Api.deleteClient(id);
+        async deleteClient(id, callbacks) {
+            const result = await Api.deleteClient(id);
+            if (result) {
                 this.items = this.items.filter((item) => item.id !== id);
-                payload.success = true;
-            }
-            catch (e) {
-                payload.success = false;
+                callbacks.ifSuccess();
+            } else {
+                callbacks.ifError();
             }
         },
         showAddModal: function () {
@@ -196,7 +195,7 @@ export default {
     created() {
         const openDeleteLightboxListener = (id) => this.openDeleteLightbox(id);
         openDeleteLightboxBus.on(openDeleteLightboxListener);
-        const deleteClientListener = async (id, payload) => await this.deleteClient(id, payload);
+        const deleteClientListener = (id, callbacks) => this.deleteClient(id, callbacks);
         deleteClientBus.on(deleteClientListener);
         const changeSortListener = (field, value) =>
             this.changeSort(field, value);

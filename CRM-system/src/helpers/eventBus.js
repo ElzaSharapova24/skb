@@ -8,8 +8,8 @@ function openDeleteLightbox(client) {
 
 const deleteClientBus = useEventBus("deleteClient");
 
-async function deleteClient(id, payload) {
-    await deleteClientBus.emit(id, payload);
+function deleteClient(id, callbacks) {
+    deleteClientBus.emit(id, callbacks);
 }
 
 const changeSortBus = useEventBus("changeSort");

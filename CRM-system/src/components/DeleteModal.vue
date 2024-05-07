@@ -9,9 +9,7 @@
                 <div class="delete__modal-content">
                     Вы&nbsp;действительно хотите удалить данного клиента?
                 </div>
-                <div class="delete__error" v-if="needDeleteClient">
-                    Не удалось удалить клиента
-                </div>
+                <div class="delete__error" v-if="error">Не удалось удалить клиента</div>
             </slot>
             <slot name="delete__footer">
                 <div class="delete__modal-footer">
@@ -31,14 +29,14 @@
 </template>
 
 <script>
-import { deleteClient } from "../helpers/eventBus.js";
+import { deleteClient, openDeleteLightbox } from "../helpers/eventBus.js";
 
 export default {
     name: "DeleteModal",
     data: function () {
         return {
             show: false,
-            needDeleteClient: false,
+            error: false,
         };
     },
     props: {
@@ -54,27 +52,21 @@ export default {
     methods: {
         closeModal: function () {
             this.show = false;
+            this.error = false;
         },
         init() {
             this.id = this.currentClient.id;
         },
-        delete: async function (){
-            const payload = {success: false};
-            var rslt = await deleteClient(this.id, payload);
-            if (payload.success) {
-                this.closeModal();
-            } else {
-                this.needDeleteClient = true;
+        delete() {
+            const callbacks = {
+                ifSuccess: () => {
+                    this.closeModal();
+                },
+                ifError: () => {
+                    this.error = true;
+                }
             }
-            //
-            //
-            // try {
-            //
-            //     this.closeModal();
-            // }
-            // catch (e) {
-            //
-            // }
+            deleteClient(this.id, callbacks);
 
         },
     },
@@ -97,7 +89,7 @@ export default {
     align-items: center;
     background: #fff;
     width: 450px;
-    height: 220px;
+    height: auto;
     position: absolute;
     top: 52%;
     left: 50%;
@@ -137,7 +129,19 @@ export default {
     color: #333333;
     width: 275px;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 26px;
+}
+
+.delete__modal-button {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    background-color: #9873ff;
+    color: #fff;
+    padding: 15px 35px;
+    font-size: 14px;
+    line-height: 100%;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
 }
 
 .delete__error {
@@ -153,18 +157,6 @@ export default {
 
 .delete__modal-footer {
     padding-bottom: 10px;
-}
-
-.delete__modal-button {
-    font-family: "Open Sans", sans-serif;
-    font-weight: 600;
-    background-color: #9873ff;
-    color: #fff;
-    padding: 15px 35px;
-    font-size: 14px;
-    line-height: 100%;
-    margin-bottom: 5px;
-    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
 }
 
 .delete__modal-button:hover {

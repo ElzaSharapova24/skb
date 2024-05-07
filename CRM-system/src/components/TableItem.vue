@@ -306,5 +306,6 @@ export default {
     .btn {
         font-size: 12px;
     }
+
 }
 </style>

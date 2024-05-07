@@ -63,8 +63,12 @@
                                 "
                                 @deleteContact="() => deleteContact(contact)"
                             />
-                            <a href="#" class="link" @click="addContact"
-                               v-if="contacts.length < 10">
+                            <a
+                                href="#"
+                                class="link"
+                                @click="addContact"
+                                v-if="contacts.length < 10"
+                            >
                                 <svg
                                     class="svg"
                                     width="16"
@@ -92,8 +96,8 @@
                                 Добавить контакт
                             </a>
                         </div>
-                        <div class="modal__error">
-                            Не удалось изменить клиента
+                        <div class="modal__error" v-if="errors.fetch">
+                            {{errors.fetch}}
                         </div>
                     </div>
                 </slot>
@@ -110,7 +114,7 @@
                         <div v-if="id" class="modal__delete">
                             <button
                                 class="modal-footer__btn btn-reset"
-                                @click="this.deleteClick(currentClient)"
+                                @click="deleteClick(currentClient)"
                             >
                                 Удалить клиента
                             </button>
@@ -118,7 +122,7 @@
                         <div v-if="!id" class="modal__delete">
                             <button
                                 class="modal-footer__btn btn-reset"
-                                @click="this.closeModal()"
+                                @click="closeModal()"
                             >
                                 Отменить
                             </button>
@@ -233,6 +237,17 @@ export default {
     background: rgba(0, 0, 0, 0.39);
 }
 
+.modal__error {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+    color: red;
+    margin-bottom: 10px;
+    padding-right: 30px;
+}
+
 .modal {
     background: #fff;
     width: 450px;
@@ -243,17 +258,6 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000000;
-}
-
-.modal__error {
-    font-family: "Open Sans", sans-serif;
-    font-weight: 400;
-    font-size: 12px;
-    text-align: center;
-    line-height: 20px;
-    color: red;
-    margin-bottom: 10px;
-    padding-right: 30px;
 }
 
 .modal__container {
