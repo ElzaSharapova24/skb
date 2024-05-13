@@ -9,7 +9,7 @@
         4. vue-tippy. 
         5. CSS.
         6. HTML.
-        9. JavaScript.
+        7. JavaScript.
 
 ### Инструкция по работе
         1. Открыть папку crm-backend в терминале.
